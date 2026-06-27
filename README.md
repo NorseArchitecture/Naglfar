@@ -2,6 +2,10 @@
 
 > Assembled from the unglamorous remnants — tokens, radii, deprecated variants — into something seaworthy enough to carry everything we've built into battle. Naglfar doesn't survive Ragnarök. It delivers.
 
+<img width="1024" height="1280" alt="Naglfar — the ship of the dead, assembled from the nails of the slain, bound for Ragnarök" src="https://github.com/user-attachments/assets/9ee526e5-9e4e-4f92-a8ec-cd619aec9587" />
+
+*Image credit: [@norsemythologyclips](https://www.instagram.com/norsemythologyclips/) — go follow them.*
+
 The design system home for the Norse Architecture — **`Norse.DesignSystem`**. Every design system eventually gets replaced; that's not a flaw to design around, it's the premise. Naglfar isn't built to outlive itself — it's built to deliver everything else to where it's going.
 
 ## Status
