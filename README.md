@@ -2,7 +2,7 @@
 
 > Assembled from the unglamorous remnants — tokens, radii, deprecated variants — into something seaworthy enough to carry everything we've built into battle. Naglfar doesn't survive Ragnarök. It delivers.
 
-<img width="1024" height="1280" alt="Naglfar — the ship of the dead, assembled from the nails of the slain, bound for Ragnarök" src="https://github.com/user-attachments/assets/9ee526e5-9e4e-4f92-a8ec-cd619aec9587" />
+![Naglfar — the ship of the dead, assembled from the nails of the slain, bound for Ragnarök](https://github.com/user-attachments/assets/9ee526e5-9e4e-4f92-a8ec-cd619aec9587 "Naglfar — the ship built to deliver everything to where it's going")
 
 *Image credit: [@norsemythologyclips](https://www.instagram.com/norsemythologyclips/) — go follow them.*
 
