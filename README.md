@@ -16,4 +16,4 @@ If you're reading this because you've been brought in to shape what actually goe
 
 ## The cosmos
 
-Naglfar rides as a submodule of [Bifrost](https://github.com/NorseArchitecture/Bifrost), the Norse Architecture's meta-repository, alongside every other realm. How design work here gets recorded — standalone, or threaded through Glitnir's design court like the rest of the platform — is still open, left that way on purpose until there's real work to decide it for.
+Naglfar rides as a submodule of [Bifröst](https://github.com/NorseArchitecture/Bifrost), the Norse Architecture's meta-repository, alongside every other realm. How design work here gets recorded — standalone, or threaded through Glitnir's design court like the rest of the platform — is still open, left that way on purpose until there's real work to decide it for.
