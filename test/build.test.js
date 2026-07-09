@@ -14,3 +14,14 @@ test('tokens.css exposes every semantic color role', () => {
 		assert.match(css, new RegExp(`--color-semantic-${role}:`), `missing --color-semantic-${role}`);
 	}
 });
+
+test('tokens.json parses and resolves references to literal hex', () => {
+	const json = JSON.parse(readFileSync(new URL('../dist/json/tokens.json', import.meta.url), 'utf8'));
+	assert.equal(json.color.semantic.primary.light, '#b5610f');
+	assert.equal(json.color.semantic.primary.dark, '#e08a1e');
+});
+
+test('tokens.js exports a flat named constant per color token', () => {
+	const js = readFileSync(new URL('../dist/js/tokens.js', import.meta.url), 'utf8');
+	assert.match(js, /export const ColorSemanticPrimaryLight = "#b5610f";/);
+});
