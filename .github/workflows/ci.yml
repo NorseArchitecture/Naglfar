@@ -1,0 +1,13 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [master]
+
+permissions:
+  packages: read
+
+jobs:
+  gate:
+    uses: NorseArchitecture/.github/.github/workflows/ci-build-test-npm.yml@master
+    secrets: inherit
