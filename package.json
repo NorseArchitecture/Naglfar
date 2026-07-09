@@ -1,0 +1,25 @@
+{
+  "name": "@norsearchitecture/design-tokens",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "Norse Architecture design tokens — colors, typography, spacing, radius, elevation, and component tokens, built with Style Dictionary.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NorseArchitecture/Naglfar.git"
+  },
+  "scripts": {
+    "build": "node style-dictionary.config.js",
+    "test": "node --test test/"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "devDependencies": {
+    "style-dictionary": "^5.5.0"
+  }
+}
