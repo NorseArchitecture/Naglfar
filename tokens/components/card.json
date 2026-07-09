@@ -1,0 +1,20 @@
+{
+  "card": {
+    "default": {
+      "background": {
+        "light": { "$type": "color", "$value": "{color.semantic.surface.light}" },
+        "dark": { "$type": "color", "$value": "{color.semantic.surface.dark}" }
+      },
+      "border": {
+        "light": { "$type": "color", "$value": "{color.semantic.border.light}" },
+        "dark": { "$type": "color", "$value": "{color.semantic.border.dark}" }
+      },
+      "radius": { "$type": "dimension", "$value": "{radius.lg}" },
+      "padding": { "$type": "dimension", "$value": "{spacing.6}" },
+      "elevation": {
+        "light": { "$type": "shadow", "$value": "{elevation.1.light}" },
+        "dark": { "$type": "shadow", "$value": "{elevation.1.dark}" }
+      }
+    }
+  }
+}

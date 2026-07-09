@@ -10,9 +10,9 @@ The design system home for the Norse Architecture — **`Norse.DesignSystem`**. 
 
 ## Status
 
-Nomenclature only, for now. The codename and namespace are settled and recorded in [Glitnir](https://github.com/NorseArchitecture/Glitnir)'s `docs/codenames.md` — that entry is registry, not taste. No tokens, no components, no rules yet.
+The token pipeline is live — `@norsearchitecture/design-tokens`, built with [Style Dictionary](https://styledictionary.com/), publishes to GitHub Packages. Colors, typography, spacing, radius, elevation, and a first pass at component tokens (button/input/card) build into CSS custom properties, a JS module, flattened JSON, and a generated C# seed (`FluentTokenSeed`) for FluentUI Blazor's `DesignTokens`.
 
-If you're reading this because you've been brought in to shape what actually goes here — welcome. There's no scaffolding to step around yet; the page is genuinely blank.
+**The palette is provisional, not final brand taste.** It exists to prove the pipeline works end to end and is expected to be replaced once real design expertise is brought in — see `Glitnir/docs/Naglfar/specs/2026-07-09-style-dictionary-tokens-design.md` for the full design and that standing caveat.
 
 ## The cosmos
 
