@@ -48,7 +48,7 @@ test('typography, spacing, and radius primitives resolve in tokens.json', () => 
 test('elevation tokens are themed the same way color tokens are', () => {
 	const css = readFileSync(new URL('../dist/css/tokens.css', import.meta.url), 'utf8');
 	assert.match(css, /--elevation-1: 0 1px 2px rgba\(28, 26, 23, 0\.08\);/);
-	assert.match(css, /\[data-theme="dark"\]\s*{[^}]*--elevation-1:/s);
+	assert.match(css, /\[data-theme="dark"\]\s*{[^}]*--elevation-1:\s*0 0 0 1px rgba\(246, 244, 240, 0\.06\);/s);
 });
 
 test('component tokens resolve through semantic/spacing/radius references', () => {

@@ -9,8 +9,19 @@
     "type": "git",
     "url": "https://github.com/NorseArchitecture/Naglfar.git"
   },
+  "main": "./dist/js/tokens.js",
+  "exports": {
+    ".": "./dist/js/tokens.js",
+    "./css": "./dist/css/tokens.css",
+    "./json": "./dist/json/tokens.json"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "node style-dictionary.config.js",
+    "prepack": "npm run build",
+    "pretest": "npm run build",
     "test": "node --test test/*.test.js"
   },
   "engines": {
