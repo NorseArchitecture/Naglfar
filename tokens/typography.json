@@ -1,0 +1,30 @@
+{
+  "font": {
+    "family": {
+      "body": { "$type": "fontFamily", "$value": "'Segoe UI', system-ui, -apple-system, sans-serif" },
+      "mono": { "$type": "fontFamily", "$value": "'Cascadia Code', ui-monospace, monospace" }
+    },
+    "size": {
+      "xs": { "$type": "dimension", "$value": "12px" },
+      "sm": { "$type": "dimension", "$value": "14px" },
+      "base": { "$type": "dimension", "$value": "16px" },
+      "lg": { "$type": "dimension", "$value": "18px" },
+      "xl": { "$type": "dimension", "$value": "20px" },
+      "2xl": { "$type": "dimension", "$value": "24px" },
+      "3xl": { "$type": "dimension", "$value": "30px" },
+      "4xl": { "$type": "dimension", "$value": "36px" },
+      "5xl": { "$type": "dimension", "$value": "48px" }
+    },
+    "weight": {
+      "regular": { "$type": "fontWeight", "$value": 400 },
+      "medium": { "$type": "fontWeight", "$value": 500 },
+      "semibold": { "$type": "fontWeight", "$value": 600 },
+      "bold": { "$type": "fontWeight", "$value": 700 }
+    },
+    "lineHeight": {
+      "tight": { "$type": "number", "$value": 1.2 },
+      "normal": { "$type": "number", "$value": 1.5 },
+      "relaxed": { "$type": "number", "$value": 1.75 }
+    }
+  }
+}

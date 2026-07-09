@@ -34,3 +34,13 @@ test('FluentTokenSeed.g.cs contains both constants with valid hex values, no lig
 	assert.doesNotMatch(cs, /class Light/);
 	assert.doesNotMatch(cs, /class Dark/);
 });
+
+test('typography, spacing, and radius primitives resolve in tokens.json', () => {
+	const json = JSON.parse(readFileSync(new URL('../dist/json/tokens.json', import.meta.url), 'utf8'));
+	assert.equal(json.font.family.body, "'Segoe UI', system-ui, -apple-system, sans-serif");
+	assert.equal(json.font.size.base, '16px');
+	assert.equal(json.font.weight.bold, 700);
+	assert.equal(json.font.lineHeight.normal, 1.5);
+	assert.equal(json.spacing['4'], '16px');
+	assert.equal(json.radius.md, '8px');
+});
