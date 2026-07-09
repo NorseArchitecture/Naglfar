@@ -50,3 +50,13 @@ test('elevation tokens are themed the same way color tokens are', () => {
 	assert.match(css, /--elevation-1: 0 1px 2px rgba\(28, 26, 23, 0\.08\);/);
 	assert.match(css, /\[data-theme="dark"\]\s*{[^}]*--elevation-1:/s);
 });
+
+test('component tokens resolve through semantic/spacing/radius references', () => {
+	const json = JSON.parse(readFileSync(new URL('../dist/json/tokens.json', import.meta.url), 'utf8'));
+	assert.equal(json.button.primary.background.light, '#b5610f');
+	assert.equal(json.button.primary.background.dark, '#e08a1e');
+	assert.equal(json.button.primary.radius, '8px');
+	assert.equal(json.button.primary['padding-x'], '16px');
+	assert.equal(json.input.default.radius, '8px');
+	assert.equal(json.card.default.padding, '24px');
+});

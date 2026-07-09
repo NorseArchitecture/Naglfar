@@ -1,0 +1,33 @@
+{
+  "input": {
+    "default": {
+      "background": {
+        "light": { "$type": "color", "$value": "{color.semantic.surface.light}" },
+        "dark": { "$type": "color", "$value": "{color.semantic.surface.dark}" }
+      },
+      "border": {
+        "light": { "$type": "color", "$value": "{color.semantic.border.light}" },
+        "dark": { "$type": "color", "$value": "{color.semantic.border.dark}" }
+      },
+      "foreground": {
+        "light": { "$type": "color", "$value": "{color.semantic.text.light}" },
+        "dark": { "$type": "color", "$value": "{color.semantic.text.dark}" }
+      },
+      "radius": { "$type": "dimension", "$value": "{radius.md}" },
+      "padding-x": { "$type": "dimension", "$value": "{spacing.3}" },
+      "padding-y": { "$type": "dimension", "$value": "{spacing.2}" }
+    },
+    "focus": {
+      "border": {
+        "light": { "$type": "color", "$value": "{color.semantic.primary.light}" },
+        "dark": { "$type": "color", "$value": "{color.semantic.primary.dark}" }
+      }
+    },
+    "danger": {
+      "border": {
+        "light": { "$type": "color", "$value": "{color.semantic.danger.light}" },
+        "dark": { "$type": "color", "$value": "{color.semantic.danger.dark}" }
+      }
+    }
+  }
+}
