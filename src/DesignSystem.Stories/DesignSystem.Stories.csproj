@@ -3,6 +3,9 @@
   <PropertyGroup>
     <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
     <MD2RazorDefaultBaseClass>global::BlazingStory.Internals.Pages.MarkdownPageBase</MD2RazorDefaultBaseClass>
+    <!-- Dev-only BlazingStory host, never ships to NuGet — overrides the platform-wide PackageId/pack
+         wiring from the shared src/Directory.Build.props, which assumes every project is a library. -->
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
