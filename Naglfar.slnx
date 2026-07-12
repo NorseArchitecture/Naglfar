@@ -10,6 +10,7 @@
 	<Folder Name="/src/">
 		<File Path="src/Directory.Build.props" />
 		<File Path="src/Directory.Build.targets" />
+		<Project Path="src/DesignSystem.Stories/DesignSystem.Stories.csproj" />
 	</Folder>
 	<Folder Name="/tests/">
 		<File Path="tests/Directory.Build.props" />
