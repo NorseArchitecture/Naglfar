@@ -14,7 +14,7 @@ The token pipeline is live — `@norsearchitecture/design-tokens`, built with [S
 
 **The palette is provisional, not final brand taste.** It exists to prove the pipeline works end to end and is expected to be replaced once real design expertise is brought in — see `Glitnir/docs/Naglfar/specs/2026-07-09-style-dictionary-tokens-design.md` for the full design and that standing caveat.
 
-`DesignSystem.Stories` is Naglfar's first .NET project — a content-only Razor Class Library of `.stories.razor` catalog pages for the platform's Blazor components. It ships no runnable app of its own; Yggdrasil hosts the BlazingStory catalog built from it (`Hosting.Stories.Client`/`.Server`), published as a container to `ghcr.io/norsearchitecture/hosting/stories`. Full design: `../Glitnir/docs/Platform/specs/2026-07-12-designsystem-stories-hosting-design.md`.
+**Naglfar is now JS-only.** `DesignSystem.Stories` — the content-only Razor Class Library of `.stories.razor` catalog pages that Yggdrasil's BlazingStory host (`Hosting.Stories.Client`/`.Server`) consumes — moved to its own repo, [Bragi](https://github.com/NorseArchitecture/Bragi), the same day it landed here. Naglfar ships the token pipeline; Bragi ships the component story catalog.
 
 ## The cosmos
 
