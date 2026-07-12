@@ -1,40 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-  <PropertyGroup>
-    <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
-    <MD2RazorDefaultBaseClass>global::BlazingStory.Internals.Pages.MarkdownPageBase</MD2RazorDefaultBaseClass>
-    <!-- Dev-only BlazingStory host, never ships to NuGet — overrides the platform-wide PackageId/pack
-         wiring from the shared src/Directory.Build.props, which assumes every project is a library. -->
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<MD2RazorDefaultBaseClass>global::BlazingStory.Internals.Pages.MarkdownPageBase</MD2RazorDefaultBaseClass>
+		<!-- BlazingStory components have trimmer compatibility issues; suppress IL2111 since these are
+		     third-party library limitations, not product code violations. -->
+		<NoWarn>$(NoWarn);IL2111</NoWarn>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="BlazingStory" Version="1.0.0-preview.88" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="11.0.0-preview.5.26302.115" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="11.0.0-preview.5.26302.115" PrivateAssets="all" />
-    <PackageReference Include="MD2RazorGenerator" Version="1.2.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="11.*-*" />
+		<PackageReference Include="BlazingStory" Version="1.*-*" />
+		<PackageReference Include="MD2RazorGenerator" Version="1.*">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
 
 	<ItemGroup>
 		<NorseRef Include="Abstractions.Components">
 			<Repo>Asgard</Repo>
 		</NorseRef>
 	</ItemGroup>
-
-	<!--
-		src/Directory.Build.targets hard-codes OutputType=Library for every /src project — true for
-		every other Norse.* class library, but this is a runnable BlazingStory WASM host, the
-		platform's first executable-shaped /src project. Directory.Build.targets is scatter-managed
-		platform config (never edited locally, per repo convention), so the override lives here,
-		scoped to this one project, reasserting OutputType after Directory.Build.targets has run.
-	-->
-	<Target Name="RestoreBlazorWebAssemblyOutputType" BeforeTargets="CoreCompile;Publish;GetTargetPath">
-		<PropertyGroup>
-			<OutputType>Exe</OutputType>
-		</PropertyGroup>
-	</Target>
 
 </Project>
