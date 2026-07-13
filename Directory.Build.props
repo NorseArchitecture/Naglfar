@@ -1,5 +1,10 @@
 <Project>
 	<PropertyGroup>
+		<!--
+			Analyzer tiers follow the platform baseline: Security/Performance/Reliability/Usage
+			at latest-All; Design stays at the global baseline because latest-All enables rules
+			(e.g. CA1034) that conflict with discriminated-union-style type shapes.
+		-->
 		<AnalysisLevel>latest-Recommended</AnalysisLevel>
 		<AnalysisLevelSecurity>latest-All</AnalysisLevelSecurity>
 		<AnalysisLevelPerformance>latest-All</AnalysisLevelPerformance>
@@ -18,6 +23,7 @@
 		<RootNamespace>Norse.$(MSBuildProjectName)</RootNamespace>
 		<TargetFramework>net11.0</TargetFramework>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<!-- Default to false unless the directory above overrides i.e. bifrost is loaded -->
 		<UseProjectReferences Condition="'$(UseProjectReferences)' == ''">false</UseProjectReferences>
 		<WarningLevel>9999</WarningLevel>
 		<_ParentProps>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))</_ParentProps>
