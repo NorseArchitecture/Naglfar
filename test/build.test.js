@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 test('tokens.css exposes --color-semantic-primary and a dark override', () => {
 	const css = readFileSync(new URL('../dist/css/tokens.css', import.meta.url), 'utf8');
 	assert.match(css, /--color-semantic-primary:\s*#[0-9a-f]{6};/);
-	assert.match(css, /\[data-theme="dark"\]\s*{[^}]*--color-semantic-primary:\s*#[0-9a-f]{6};/s);
+	assert.match(css, /@media \(prefers-color-scheme: dark\)\s*{\s*:root\s*{[^}]*--color-semantic-primary:\s*#[0-9a-f]{6};/s);
 });
 
 test('tokens.css exposes every semantic color role', () => {
@@ -48,7 +48,7 @@ test('typography, spacing, and radius primitives resolve in tokens.json', () => 
 test('elevation tokens are themed the same way color tokens are', () => {
 	const css = readFileSync(new URL('../dist/css/tokens.css', import.meta.url), 'utf8');
 	assert.match(css, /--elevation-1: 0 1px 2px rgba\(28, 26, 23, 0\.08\);/);
-	assert.match(css, /\[data-theme="dark"\]\s*{[^}]*--elevation-1:\s*0 0 0 1px rgba\(246, 244, 240, 0\.06\);/s);
+	assert.match(css, /@media \(prefers-color-scheme: dark\)\s*{\s*:root\s*{[^}]*--elevation-1:\s*0 0 0 1px rgba\(246, 244, 240, 0\.06\);/s);
 });
 
 test('component tokens resolve through semantic/spacing/radius references', () => {
@@ -59,4 +59,31 @@ test('component tokens resolve through semantic/spacing/radius references', () =
 	assert.equal(json.button.primary['padding-x'], '16px');
 	assert.equal(json.input.default.radius, '8px');
 	assert.equal(json.card.default.padding, '24px');
+});
+
+test('every color token in the source resolves to a valid 6-digit hex value', async () => {
+	// Walks Style Dictionary's own resolved token list (typed, not the flattened JSON
+	// output) so this catches every color token by $type — raw palette, semantic,
+	// and component references alike — without hardcoding a single token name. A new
+	// color token added to tokens/*.json is covered automatically.
+	//
+	// Uses getPlatformTokens(), not sd.allTokens directly: allTokens is populated at
+	// init, before reference resolution, so a token like {color.semantic.primary.light}
+	// still holds its unresolved "{color.amber.700}" reference string at that point.
+	// getPlatformTokens() runs the same resolve step the real build platforms use.
+	const { default: StyleDictionary } = await import('style-dictionary');
+	const sd = new StyleDictionary({ source: ['tokens/**/*.json'], platforms: { probe: { transformGroup: 'css' } } });
+	await sd.hasInitialized;
+	const { allTokens } = await sd.getPlatformTokens('probe');
+
+	const colorTokens = allTokens.filter((token) => token.$type === 'color');
+	assert.ok(colorTokens.length > 0, 'expected at least one $type: "color" token to be defined');
+
+	for (const token of colorTokens) {
+		assert.match(
+			token.$value,
+			/^#[0-9a-f]{6}$/i,
+			`${token.key} resolves to "${token.$value}", which is not a valid 6-digit hex color`,
+		);
+	}
 });

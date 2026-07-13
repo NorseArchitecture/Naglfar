@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+	<PropertyGroup>
+		<Description>Norse.DesignSystem.Tokens: 100%-generated output of Naglfar's Style Dictionary pipeline — FluentTokenSeed (AccentBaseColor/NeutralBaseColor, for FluentUI Blazor's DesignTokens) and a native wwwroot/norse-design-tokens.css static web asset (plain semantic color custom properties, no third-party dependency). Versioned identically to @norsearchitecture/design-tokens; published in the same release step. No hand-authored C# anywhere in this project.</Description>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="../../dist/csharp/FluentTokenSeed.g.cs" Link="FluentTokenSeed.g.cs" />
+	</ItemGroup>
+</Project>
