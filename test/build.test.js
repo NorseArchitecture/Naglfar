@@ -26,6 +26,15 @@ test('tokens.js exports a flat named constant per color token', () => {
 	assert.match(js, /export const ColorSemanticPrimaryLight = "#b5610f";/);
 });
 
+test('FluentTokenSeed.g.cs contains both constants with valid hex values, no light/dark split', () => {
+	const cs = readFileSync(new URL('../dist/csharp/FluentTokenSeed.g.cs', import.meta.url), 'utf8');
+	assert.match(cs, /namespace Norse\.DesignSystem;/);
+	assert.match(cs, /public const string AccentBaseColor = "#b5610f";/);
+	assert.match(cs, /public const string NeutralBaseColor = "#797265";/);
+	assert.doesNotMatch(cs, /class Light/);
+	assert.doesNotMatch(cs, /class Dark/);
+});
+
 test('typography, spacing, and radius primitives resolve in tokens.json', () => {
 	const json = JSON.parse(readFileSync(new URL('../dist/json/tokens.json', import.meta.url), 'utf8'));
 	assert.equal(json.font.family.body, "'Segoe UI', system-ui, -apple-system, sans-serif");

@@ -1,15 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
-		<Description>Norse.DesignSystem.Tokens: FluentTokenSeed (AccentBaseColor/NeutralBaseColor, for FluentUI Blazor's DesignTokens) is generated at build time directly from tokens/color.json — see generate-fluent-token-seed.ps1 — deliberately independent of `npm run build`, so this project's own build/test/pack never need npm to have run first. The native wwwroot/norse-design-tokens.css static web asset (plain semantic color custom properties, no third-party dependency) is still Style Dictionary's own output and does need `npm run build` — that coupling is CSS's actual domain, not incidental. Versioned identically to @norsearchitecture/design-tokens; published in the same release step. No hand-authored C# anywhere in this project.</Description>
+		<Description>Norse.DesignSystem.Tokens: 100%-generated output of Naglfar's Style Dictionary pipeline — FluentTokenSeed (AccentBaseColor/NeutralBaseColor, for FluentUI Blazor's DesignTokens) and a native wwwroot/norse-design-tokens.css static web asset (plain semantic color custom properties, no third-party dependency). Versioned identically to @norsearchitecture/design-tokens; published in the same release step. No hand-authored C# anywhere in this project.</Description>
 	</PropertyGroup>
-	<Target Name="GenerateFluentTokenSeed" BeforeTargets="CoreCompile">
-		<PropertyGroup>
-			<_FluentTokenSeedOutput>$(IntermediateOutputPath)FluentTokenSeed.g.cs</_FluentTokenSeedOutput>
-		</PropertyGroup>
-		<Exec Command="pwsh -NoProfile -File &quot;$(MSBuildProjectDirectory)/generate-fluent-token-seed.ps1&quot; -ColorTokensPath &quot;$(MSBuildProjectDirectory)/../../tokens/color.json&quot; -OutputPath &quot;$(_FluentTokenSeedOutput)&quot;" />
+	<ItemGroup>
+		<Compile Include="../../dist/csharp/FluentTokenSeed.g.cs" Link="FluentTokenSeed.g.cs" />
+	</ItemGroup>
+	<Target Name="BuildDesignTokens" BeforeTargets="Build;ResolveStaticWebAssetsConfiguration;AssignTargetPaths;CoreCompile">
+		<Exec Command="npm ci" WorkingDirectory="$(MSBuildProjectDirectory)/../.." Condition="!Exists('$(MSBuildProjectDirectory)/../../node_modules')" />
+		<Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)/../.." />
 		<ItemGroup>
-			<Compile Include="$(_FluentTokenSeedOutput)" />
-			<FileWrites Include="$(_FluentTokenSeedOutput)" />
+			<Content Remove="wwwroot/norse-design-tokens.css" />
+			<Content Include="wwwroot/norse-design-tokens.css" />
 		</ItemGroup>
 	</Target>
 </Project>

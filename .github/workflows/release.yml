@@ -28,10 +28,51 @@ jobs:
     with:
       language: javascript-typescript
 
+  # Inlined rather than calling the shared publish-nuget.yml: DesignSystem.Tokens' pack
+  # now shells to npm (Style Dictionary generates FluentTokenSeed.g.cs and the CSS static
+  # web asset), so this realm's own publish job needs Node on the runner. The shared
+  # workflow stays npm-free for every other NuGet-only realm.
   publish-nuget:
     needs: [build-test, codeql-csharp, codeql-js]
-    uses: NorseArchitecture/.github/.github/workflows/publish-nuget.yml@master
-    secrets: inherit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "11.0.x"
+          dotnet-quality: preview
+
+      - name: Pack
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
+        run: dotnet pack -c Release -o ./artifacts/nupkg
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: cyclonedx-json
+          output-file: sbom-nuget.cyclonedx.json
+
+      - name: Push to GitHub Packages
+        run: dotnet nuget push "./artifacts/nupkg/*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/NorseArchitecture/index.json" --skip-duplicate
+
+      - name: Upload release assets
+        uses: actions/upload-artifact@v7
+        with:
+          name: nuget-artifacts
+          path: |
+            ./artifacts/nupkg/*.nupkg
+            ./sbom-nuget.cyclonedx.json
+          retention-days: 7
 
   publish-npm:
     needs: [build-test, codeql-csharp, codeql-js]
