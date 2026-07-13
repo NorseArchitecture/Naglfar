@@ -1,6 +1,6 @@
 {
   "name": "@norsearchitecture/design-tokens",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "private": false,
   "type": "module",
   "description": "Norse Architecture design tokens — colors, typography, spacing, radius, elevation, and component tokens, built with Style Dictionary.",
