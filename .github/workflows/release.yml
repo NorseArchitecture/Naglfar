@@ -11,6 +11,33 @@ permissions:
   pull-requests: write
 
 jobs:
-  release:
+  check-version-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Compare package.json version against tag
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+
+          if [ "$PACKAGE_VERSION" != "$TAG_VERSION" ]; then
+            echo "::error::Version mismatch — package.json version ($PACKAGE_VERSION) does not match pushed tag ($GITHUB_REF_NAME, stripped: $TAG_VERSION). @norsearchitecture/design-tokens (npm) and Norse.DesignSystem.Tokens (NuGet) must always release at identical versions."
+            exit 1
+          fi
+
+  release-npm:
+    needs: [check-version-sync]
     uses: NorseArchitecture/.github/.github/workflows/release-npm.yml@master
     secrets: inherit
+
+  release-nuget:
+    needs: [check-version-sync]
+    uses: NorseArchitecture/.github/.github/workflows/release-nuget.yml@master
+    secrets: inherit
+
+  sound-gjallarhorn:
+    needs: [release-nuget]
+    uses: NorseArchitecture/.github/.github/workflows/sound-gjallarhorn.yml@master
+    secrets:
+      token: ${{ secrets.SCATTER_PAT }}

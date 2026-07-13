@@ -1,0 +1,26 @@
+<Project>
+	<PropertyGroup>
+		<AnalysisLevel>latest-Recommended</AnalysisLevel>
+		<AnalysisLevelSecurity>latest-All</AnalysisLevelSecurity>
+		<AnalysisLevelPerformance>latest-All</AnalysisLevelPerformance>
+		<AnalysisLevelReliability>latest-All</AnalysisLevelReliability>
+		<AnalysisLevelUsage>latest-All</AnalysisLevelUsage>
+		<!--
+			The brand prefix lives here and nowhere else: project folders and .csproj files are
+			brand-free, so a fork rebrands by changing "Norse" once per realm — no file renames.
+		-->
+		<AssemblyName>Norse.$(MSBuildProjectName)</AssemblyName>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>preview</LangVersion>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Norse.$(MSBuildProjectName)</RootNamespace>
+		<TargetFramework>net11.0</TargetFramework>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<UseProjectReferences Condition="'$(UseProjectReferences)' == ''">false</UseProjectReferences>
+		<WarningLevel>9999</WarningLevel>
+		<_ParentProps>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))</_ParentProps>
+	</PropertyGroup>
+	<Import Project="$(_ParentProps)" Condition="Exists('$(_ParentProps)')" />
+</Project>
