@@ -65,16 +65,6 @@ const sd = new StyleDictionary({
 				},
 			],
 		},
-		cssWwwroot: {
-			transformGroup: 'css',
-			buildPath: 'src/DesignSystem.Tokens/wwwroot/',
-			files: [
-				{
-					destination: 'norse-design-tokens.css',
-					format: 'css/theme-variables',
-				},
-			],
-		},
 		js: {
 			transformGroup: 'js',
 			buildPath: 'dist/js/',
