@@ -24,3 +24,7 @@ jobs:
           dotnet-version: "11.0.x"
           dotnet-quality: preview
       - run: dotnet test
+        env:
+          # First org-feed reach for this realm (the scattered Law of the Realms analyzer package,
+          # 2026-08-03): restore authenticates exactly as the canonical ci-build-test template does.
+          NUGET_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
