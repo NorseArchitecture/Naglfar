@@ -1,0 +1,14 @@
+{
+  "bifrost": {
+    "seam": {
+      "light": {
+        "$type": "gradient",
+        "$value": "linear-gradient(180deg, {color.red.600}, {color.amber.500}, {color.gold.400}, {color.green.600}, {color.blue.600}, {color.violet.600})"
+      },
+      "dark": {
+        "$type": "gradient",
+        "$value": "linear-gradient(180deg, {color.red.400}, {color.amber.500}, {color.gold.400}, {color.green.400}, {color.blue.400}, {color.violet.400})"
+      }
+    }
+  }
+}

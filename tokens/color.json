@@ -31,6 +31,10 @@
       "400": { "$type": "color", "$value": "#6d9bd1" },
       "600": { "$type": "color", "$value": "#3468a6" }
     },
+    "violet": {
+      "400": { "$type": "color", "$value": "#8b7ae0" },
+      "600": { "$type": "color", "$value": "#6d5bd0" }
+    },
     "semantic": {
       "primary": {
         "light": { "$type": "color", "$value": "{color.amber.700}" },
