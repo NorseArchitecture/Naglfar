@@ -67,16 +67,19 @@ test('--bifrost-seam gradient token is built into both the light :root block and
 	// this is the only coverage standing between a typo'd reference (or a rename) and a
 	// silently green build. Asserts against the real resolved gradient shape, not a guess.
 	const css = readFileSync(new URL('../dist/css/tokens.css', import.meta.url), 'utf8');
+	// Scoped to the leading :root block (not just "anywhere in the file"), same as the dark
+	// assertion below -- otherwise a formatter regression that emitted the light declaration
+	// under the wrong selector would still pass.
 	assert.match(
 		css,
-		/--bifrost-seam:\s*linear-gradient\(180deg,\s*#[0-9a-f]{6},\s*#[0-9a-f]{6},\s*#[0-9a-f]{6},\s*#[0-9a-f]{6},\s*#[0-9a-f]{6},\s*#[0-9a-f]{6}\);/i,
+		/^:root\s*{[^}]*--bifrost-seam:\s*linear-gradient\(180deg,\s*#[0-9a-f]{6},\s*#[0-9a-f]{6},\s*#[0-9a-f]{6},\s*#[0-9a-f]{6},\s*#[0-9a-f]{6},\s*#[0-9a-f]{6}\);/i,
 	);
 	assert.match(
 		css,
 		/@media \(prefers-color-scheme: dark\)\s*{\s*:root\s*{[^}]*--bifrost-seam:\s*linear-gradient\(180deg,\s*#[0-9a-f]{6},\s*#[0-9a-f]{6},\s*#[0-9a-f]{6},\s*#[0-9a-f]{6},\s*#[0-9a-f]{6},\s*#[0-9a-f]{6}\);/is,
 	);
 	assert.equal(
-		/--bifrost-seam: (linear-gradient\(180deg,[^;]+\));/.exec(css)[1],
+		/^:root\s*{[^}]*--bifrost-seam: (linear-gradient\(180deg,[^;]+\));/.exec(css)[1],
 		'linear-gradient(180deg, #c0392b, #e08a1e, #e0bd4a, #3f7d3f, #3468a6, #6d5bd0)',
 	);
 	assert.equal(
