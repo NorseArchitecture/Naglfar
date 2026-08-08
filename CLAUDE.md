@@ -8,7 +8,7 @@ Session root must be **Bifröst**, not this repo directly — org-wide settings 
 
 ## 1. What This Repository Is
 
-Naglfar is **the token pipeline** — `Norse.DesignSystem`: colors, typography, spacing, radius, elevation, and a first pass at component tokens (button/input/card), authored as `tokens/*.json` and built with [Style Dictionary](https://styledictionary.com/) into `@norsearchitecture/design-tokens`, published to GitHub Packages. **This repo is JS-first, npm-only** — no hand-authored C# anywhere in it.
+Naglfar is **the token pipeline** — `Norse.DesignSystem`: colors, typography, spacing, radius, elevation, and component tokens (button/input/card, plus the `--bifrost-seam` gradient in `tokens/components/bifrost.json`), authored as `tokens/*.json` and built with [Style Dictionary](https://styledictionary.com/) into `@norsearchitecture/design-tokens`, published to GitHub Packages. **This repo is JS-first, npm-only** — no hand-authored C# anywhere in it.
 
 **One 100%-generated .NET exception:** `src/DesignSystem.Tokens` packs `Norse.DesignSystem.Tokens`, versioned identically to the npm package and released alongside it in the same step. It ships two things, both generated, neither hand-editable: `FluentTokenSeed` (`AccentBaseColor`/`NeutralBaseColor` constants for FluentUI Blazor's theme API — `AccentBaseColor` is consumed by Midgard's `Infrastructure.Components.Theme.FluentUI` via `IThemeService`; `NeutralBaseColor` is generated but currently unconsumed, since FluentUI Blazor v5 derives its neutral ramp algorithmically from the accent color alone) and `norse-design-tokens.css` (plain semantic custom properties, dark-mode-switched via `@media (prefers-color-scheme: dark)`, consumed by Midgard's `Infrastructure.Components.Theme`). Never edit `FluentTokenSeed.g.cs` or `norse-design-tokens.css` directly — edit `tokens/*.json` and run `npm run build`. Full design: `../Glitnir/docs/Naglfar/specs/2026-07-09-style-dictionary-tokens-design.md`; the FluentUI v5 neutral-color gap: `../Glitnir/docs/Platform/specs/2026-07-11-blazor-component-architecture-design.md` Addendum 2.
 
@@ -18,7 +18,9 @@ Naglfar is **the token pipeline** — `Norse.DesignSystem`: colors, typography, 
 
 **Design-system content here is exempt from the platform's brainstorm → spec → plan → TDD cycle** — the standing call for this realm and Bragi alike (`../Bifrost/CLAUDE.md` §6). Token values, naming, and pipeline wiring are content/mechanical decisions, not behavioral code. If genuine behavioral logic (not just token authoring or generation wiring) ever lands here, reassess — that would warrant the standard TDD discipline like any other realm.
 
-**Ungated CI** — like Bragi, little unit-testable logic lives in this repo directly; the `gate / build` check runs but isn't required by branch protection. Revisit if that changes.
+**Build & test:** `npm run build` (tokens → `dist/` via `style-dictionary.config.js`), `npm test` (rebuilds, then `node --test test/*.test.js` pins the emitted output), `dotnet test Naglfar.slnx` (`FluentTokenSeedTests` + `PackagingTests` over the generated .NET surface). Node ≥ 22; .NET 11 preview SDK via `global.json`. `gen/` holds only the scattered generator-bootstrap props — empty by design until a generator lands here.
+
+**Ungated CI** — the `gate / build` check runs but isn't required by branch protection. The original "little unit-testable logic" rationale is stale: real coverage now exists on both toolchains (`test/build.test.js` and `tests/DesignSystem.Tokens.Tests`). Gating is worth revisiting.
 
 How design work here gets recorded going forward — standalone, or threaded through Glitnir's design court like the rest of the platform — is still open, left that way on purpose until there's real work to decide it for.
 
