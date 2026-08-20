@@ -3,12 +3,50 @@
 		<Description>Norse.DesignSystem.Tokens: 100%-generated output of Naglfar's Style Dictionary pipeline — FluentTokenSeed (AccentBaseColor/NeutralBaseColor, for FluentUI Blazor's DesignTokens) and a native wwwroot/norse-design-tokens.css static web asset (plain semantic color custom properties, no third-party dependency). Versioned identically to @norsearchitecture/design-tokens; published in the same release step. No hand-authored C# anywhere in this project.</Description>
 		<NorseFrontendPlatforms>All</NorseFrontendPlatforms>
 	</PropertyGroup>
+	<!--
+		node_modules never lands inside the repo tree: it's installed straight to
+		NORSE_BUILD_ARTIFACTS_DIR (container-native disk, or the Windows-native dir
+		Redirect-BuildArtifacts.ps1 sets), same as .NET's own BaseIntermediateOutputPath
+		redirect in the root Directory.Build.props. A symlink/junction back into the repo
+		doesn't work here — one OS's reparse point is unreadable to the other over the
+		9p-bridged mount — so scripts/loader-register.mjs (a Node module customization
+		hook, registered from package.json's "build" script via Node's module preload
+		option) redirects style-dictionary's bare-specifier resolution to
+		NORSE_NPM_MODULES_DIR at import time instead. Falls back to plain in-tree
+		node_modules when NORSE_BUILD_ARTIFACTS_DIR is unset (e.g. `npm run build` run
+		standalone, outside the .NET build).
+
+		Project-level, not inside the target: RestoreDesignTokenPackages reads these from
+		its Inputs/Outputs attributes, which MSBuild evaluates before the target body runs.
+	-->
+	<PropertyGroup>
+		<_NpmProjectDir>$(MSBuildProjectDirectory)/../..</_NpmProjectDir>
+		<_NpmInstallDir Condition="'$(NORSE_BUILD_ARTIFACTS_DIR)' != ''">$(NORSE_BUILD_ARTIFACTS_DIR)/Naglfar</_NpmInstallDir>
+		<_NpmInstallDir Condition="'$(NORSE_BUILD_ARTIFACTS_DIR)' == ''">$(_NpmProjectDir)</_NpmInstallDir>
+	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="../../dist/csharp/FluentTokenSeed.g.cs" Link="FluentTokenSeed.g.cs" />
 		<Content Include="../../dist/css/tokens.css" Link="wwwroot/norse-design-tokens.css" />
 	</ItemGroup>
-	<Target Name="BuildDesignTokens" BeforeTargets="Build;ResolveStaticWebAssetsConfiguration;AssignTargetPaths;CoreCompile">
-		<Exec Command="npm ci" WorkingDirectory="$(MSBuildProjectDirectory)/../.." Condition="!Exists('$(MSBuildProjectDirectory)/../../node_modules')" />
-		<Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)/../.." />
+	<!--
+		Keyed to the manifests, not to "does node_modules exist" — NORSE_BUILD_ARTIFACTS_DIR
+		is deliberately persistent across builds, so an existence check installs once and then
+		never again: a later dependency bump would resolve the previous tree and generate
+		tokens with stale tooling, silently. Outputs names npm's own hidden lockfile
+		(node_modules/.package-lock.json), which it rewrites on every install to record the
+		tree it actually laid down, so MSBuild's up-to-date check reinstalls exactly when a
+		manifest is newer than the installed tree, and skips otherwise. package.json rides in
+		Inputs alongside the lockfile because `npm ci` refuses to run at all when the two
+		disagree — better to reinstall than to fail the next build on a stale pair.
+	-->
+	<Target Name="RestoreDesignTokenPackages"
+			Inputs="$(_NpmProjectDir)/package.json;$(_NpmProjectDir)/package-lock.json"
+			Outputs="$(_NpmInstallDir)/node_modules/.package-lock.json">
+		<MakeDir Directories="$(_NpmInstallDir)" Condition="'$(NORSE_BUILD_ARTIFACTS_DIR)' != ''" />
+		<Copy SourceFiles="$(_NpmProjectDir)/package.json;$(_NpmProjectDir)/package-lock.json" DestinationFolder="$(_NpmInstallDir)" Condition="'$(NORSE_BUILD_ARTIFACTS_DIR)' != ''" />
+		<Exec Command="npm ci --prefix &quot;$(_NpmInstallDir)&quot;" WorkingDirectory="$(_NpmProjectDir)" />
+	</Target>
+	<Target Name="BuildDesignTokens" DependsOnTargets="RestoreDesignTokenPackages" BeforeTargets="Build;ResolveStaticWebAssetsConfiguration;AssignTargetPaths;CoreCompile">
+		<Exec Command="npm run build" WorkingDirectory="$(_NpmProjectDir)" EnvironmentVariables="NORSE_NPM_MODULES_DIR=$(_NpmInstallDir)/node_modules" />
 	</Target>
 </Project>
