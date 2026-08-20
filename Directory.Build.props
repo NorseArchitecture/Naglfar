@@ -2,15 +2,26 @@
 	<!--
 		Realm-owned (2026-08-08), not scattered — Naglfar's C# surface (DesignSystem.Tokens)
 		is 100%-generated from Style Dictionary output, with no hand-authored surface and no
-		Directory.Build.targets of its own (deleted the same day, see git history — a
+		Directory.Build.targets of its own (deleted the same day, see git history): a
 		permanent architectural leaf never declares a NorseRef/NorseDesignRef/
-		NorseGeneratorRef, so the canonical file's UseProjectReferences/_ParentProps chain,
-		which exists solely to propagate the workspace-vs-standalone NorseRef-crossing
-		decision down from Bifröst's root, has nothing to serve here — dropped). Everything
-		below is ordinary project identity and code-quality baseline that
-		DesignSystem.Tokens.csproj genuinely depends on inheriting (it declares no
-		AssemblyName/TargetFramework/Nullable of its own), so it stays exactly as the
+		NorseGeneratorRef. Everything below is ordinary project identity and code-quality
+		baseline that DesignSystem.Tokens.csproj genuinely depends on inheriting (it declares
+		no AssemblyName/TargetFramework/Nullable of its own), so it stays exactly as the
 		canonical file has it. Doctrine: Glitnir/docs/the-runes.md ch. 2/7.
+
+		The chain import is KEPT (restored 2026-08-20), for the same reason as Svartálfheim's
+		copy — see that file's header, which carries the full account. Short version: the
+		import was dropped on the reasoning that a leaf never needs the
+		workspace-vs-standalone NorseRef-crossing decision UseProjectReferences carries, which
+		is true and still true; what it missed is that Bifröst's root Directory.Build.props
+		carries a SECOND, unrelated payload — the NORSE_BUILD_ARTIFACTS_DIR redirect moving
+		bin/obj off a tree shared with another build environment. That applies to every realm
+		that compiles anything, leaf or not, and this import is the only thing carrying it
+		down. It cannot move to a targets file: BaseIntermediateOutputPath must be set before
+		Microsoft.Common.props reads it, which is props-time only.
+
+		Inheriting UseProjectReferences and NorseRefVersion along with it is inert here by
+		construction — no project in this realm declares a NorseRef for either to govern.
 	-->
 	<PropertyGroup>
 		<!--
@@ -37,5 +48,7 @@
 		<TargetFramework>net11.0</TargetFramework>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<WarningLevel>9999</WarningLevel>
+		<_ParentProps>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))</_ParentProps>
 	</PropertyGroup>
+	<Import Project="$(_ParentProps)" Condition="Exists('$(_ParentProps)')" />
 </Project>
