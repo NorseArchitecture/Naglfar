@@ -12,9 +12,12 @@
 		9p-bridged mount — so scripts/loader-register.mjs (a Node module customization
 		hook, registered from package.json's "build" script via Node's module preload
 		option) redirects style-dictionary's bare-specifier resolution to
-		NORSE_NPM_MODULES_DIR at import time instead. Falls back to plain in-tree
-		node_modules when NORSE_BUILD_ARTIFACTS_DIR is unset (e.g. `npm run build` run
-		standalone, outside the .NET build).
+		$(NORSE_BUILD_ARTIFACTS_DIR)/Naglfar/node_modules at import time instead.
+		scripts/loader-resolve.mjs reads NORSE_BUILD_ARTIFACTS_DIR itself — the same
+		persistent var _NpmInstallDir below is keyed off — so `npm run build`/`npm test`
+		behave identically whether run standalone or via the .NET build; no value needs
+		handing down through the Exec task. Falls back to plain in-tree node_modules when
+		NORSE_BUILD_ARTIFACTS_DIR is unset.
 
 		Project-level, not inside the target: RestoreDesignTokenPackages reads these from
 		its Inputs/Outputs attributes, which MSBuild evaluates before the target body runs.
@@ -47,6 +50,6 @@
 		<Exec Command="npm ci --prefix &quot;$(_NpmInstallDir)&quot;" WorkingDirectory="$(_NpmProjectDir)" />
 	</Target>
 	<Target Name="BuildDesignTokens" DependsOnTargets="RestoreDesignTokenPackages" BeforeTargets="Build;ResolveStaticWebAssetsConfiguration;AssignTargetPaths;CoreCompile">
-		<Exec Command="npm run build" WorkingDirectory="$(_NpmProjectDir)" EnvironmentVariables="NORSE_NPM_MODULES_DIR=$(_NpmInstallDir)/node_modules" />
+		<Exec Command="npm run build" WorkingDirectory="$(_NpmProjectDir)" />
 	</Target>
 </Project>
