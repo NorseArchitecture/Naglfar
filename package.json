@@ -31,6 +31,6 @@
     "registry": "https://npm.pkg.github.com"
   },
   "devDependencies": {
-    "style-dictionary": "^5.5.0"
+    "style-dictionary": "^5.7.0"
   }
 }
