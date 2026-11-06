@@ -12,7 +12,7 @@ version: 2
 #
 # Hand-owned by Naglfar, not scattered (Naglfar sits outside the 'dependabot' group in
 # Ginnungagap's manifest.psd1, same as it does for 'release'): identical to the canonical
-# config/.github/dependabot.yml plus the npm entry for the token pipeline below.
+# config/.github/dependabot.yml plus the bun entry for the token pipeline below.
 multi-ecosystem-groups:
   dependencies:
     schedule:
@@ -32,7 +32,7 @@ updates:
 
   # The token pipeline (@norsearchitecture/design-tokens): Style Dictionary and whatever else
   # package.json pins. Rides the same monthly pull request as the actions.
-  - package-ecosystem: npm
+  - package-ecosystem: bun
     directory: "/"
     patterns: ["*"]
     multi-ecosystem-group: dependencies

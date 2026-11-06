@@ -14,7 +14,7 @@
 		option) redirects style-dictionary's bare-specifier resolution to
 		$(NORSE_BUILD_ARTIFACTS_DIR)/Naglfar/node_modules at import time instead.
 		scripts/loader-resolve.mjs reads NORSE_BUILD_ARTIFACTS_DIR itself — the same
-		persistent var _NpmInstallDir below is keyed off — so `npm run build`/`npm test`
+		persistent var _BunInstallDir below is keyed off — so `bun run build`/`bun run test`
 		behave identically whether run standalone or via the .NET build; no value needs
 		handing down through the Exec task. Falls back to plain in-tree node_modules when
 		NORSE_BUILD_ARTIFACTS_DIR is unset.
@@ -23,9 +23,10 @@
 		its Inputs/Outputs attributes, which MSBuild evaluates before the target body runs.
 	-->
 	<PropertyGroup>
-		<_NpmProjectDir>$(MSBuildProjectDirectory)/../..</_NpmProjectDir>
-		<_NpmInstallDir Condition="'$(NORSE_BUILD_ARTIFACTS_DIR)' != ''">$(NORSE_BUILD_ARTIFACTS_DIR)/Naglfar</_NpmInstallDir>
-		<_NpmInstallDir Condition="'$(NORSE_BUILD_ARTIFACTS_DIR)' == ''">$(_NpmProjectDir)</_NpmInstallDir>
+		<_BunProjectDir>$(MSBuildProjectDirectory)/../..</_BunProjectDir>
+		<_BunInstallDir Condition="'$(NORSE_BUILD_ARTIFACTS_DIR)' != ''">$(NORSE_BUILD_ARTIFACTS_DIR)/Naglfar</_BunInstallDir>
+		<_BunInstallDir Condition="'$(NORSE_BUILD_ARTIFACTS_DIR)' == ''">$(_BunProjectDir)</_BunInstallDir>
+		<_BunRestoreStamp>$(_BunInstallDir)/node_modules/.norse-restore.stamp</_BunRestoreStamp>
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="../../dist/csharp/FluentTokenSeed.g.cs" Link="FluentTokenSeed.g.cs" />
@@ -35,21 +36,22 @@
 		Keyed to the manifests, not to "does node_modules exist" — NORSE_BUILD_ARTIFACTS_DIR
 		is deliberately persistent across builds, so an existence check installs once and then
 		never again: a later dependency bump would resolve the previous tree and generate
-		tokens with stale tooling, silently. Outputs names npm's own hidden lockfile
-		(node_modules/.package-lock.json), which it rewrites on every install to record the
-		tree it actually laid down, so MSBuild's up-to-date check reinstalls exactly when a
-		manifest is newer than the installed tree, and skips otherwise. package.json rides in
-		Inputs alongside the lockfile because `npm ci` refuses to run at all when the two
-		disagree — better to reinstall than to fail the next build on a stale pair.
+		tokens with stale tooling, silently. Bun leaves no install record of its own in
+		node_modules, so Outputs names a stamp this target touches after each successful install;
+		MSBuild's up-to-date check reinstalls exactly when a manifest is newer than the stamp (or
+		node_modules is gone, taking the stamp with it), and skips otherwise. package.json rides
+		in Inputs alongside the lockfile because a frozen `bun install` refuses to run at all when
+		the two disagree — better to reinstall than to fail the next build on a stale pair.
 	-->
 	<Target Name="RestoreDesignTokenPackages"
-			Inputs="$(_NpmProjectDir)/package.json;$(_NpmProjectDir)/package-lock.json"
-			Outputs="$(_NpmInstallDir)/node_modules/.package-lock.json">
-		<MakeDir Directories="$(_NpmInstallDir)" Condition="'$(NORSE_BUILD_ARTIFACTS_DIR)' != ''" />
-		<Copy SourceFiles="$(_NpmProjectDir)/package.json;$(_NpmProjectDir)/package-lock.json" DestinationFolder="$(_NpmInstallDir)" Condition="'$(NORSE_BUILD_ARTIFACTS_DIR)' != ''" />
-		<Exec Command="npm ci --prefix &quot;$(_NpmInstallDir)&quot;" WorkingDirectory="$(_NpmProjectDir)" />
+			Inputs="$(_BunProjectDir)/package.json;$(_BunProjectDir)/bun.lock"
+			Outputs="$(_BunRestoreStamp)">
+		<MakeDir Directories="$(_BunInstallDir)" Condition="'$(NORSE_BUILD_ARTIFACTS_DIR)' != ''" />
+		<Copy SourceFiles="$(_BunProjectDir)/package.json;$(_BunProjectDir)/bun.lock" DestinationFolder="$(_BunInstallDir)" Condition="'$(NORSE_BUILD_ARTIFACTS_DIR)' != ''" />
+		<Exec Command="bun install --frozen-lockfile --cwd &quot;$(_BunInstallDir)&quot;" WorkingDirectory="$(_BunProjectDir)" />
+		<Touch Files="$(_BunRestoreStamp)" AlwaysCreate="true" />
 	</Target>
 	<Target Name="BuildDesignTokens" DependsOnTargets="RestoreDesignTokenPackages" BeforeTargets="Build;ResolveStaticWebAssetsConfiguration;AssignTargetPaths;CoreCompile">
-		<Exec Command="npm run build" WorkingDirectory="$(_NpmProjectDir)" />
+		<Exec Command="bun run build" WorkingDirectory="$(_BunProjectDir)" />
 	</Target>
 </Project>

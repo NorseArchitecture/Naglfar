@@ -20,8 +20,8 @@
   ],
   "scripts": {
     "build": "node --import ./scripts/loader-register.mjs style-dictionary.config.js",
-    "prepack": "npm run build",
-    "pretest": "npm run build",
+    "prepack": "bun run build",
+    "pretest": "bun run build",
     "test": "node --import ./scripts/loader-register.mjs --test test/*.test.js"
   },
   "engines": {
@@ -31,6 +31,9 @@
     "registry": "https://npm.pkg.github.com"
   },
   "devDependencies": {
-    "style-dictionary": "^5.7.0"
+    "style-dictionary": "^5.8.0"
+  },
+  "overrides": {
+    "glob": "^14.0.4"
   }
 }

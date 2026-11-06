@@ -29,12 +29,13 @@ The payoffs stack. A palette change is a one-file PR with a build-time blast rad
 ## Build and test
 
 ```shell
-npm run build              # tokens/*.json → dist/ (css, js, json, csharp) via Style Dictionary
-npm test                   # rebuilds first, then pins the emitted output — node --test
+bun install                # dependencies, from bun.lock
+bun run build              # tokens/*.json → dist/ (css, js, json, csharp) via Style Dictionary
+bun run test               # rebuilds first, then pins the emitted output — node --test
 dotnet test Naglfar.slnx   # FluentTokenSeed + packaging tests over the generated .NET surface
 ```
 
-Requires Node ≥ 22 and the .NET 11 preview SDK pinned by `global.json`. The pipeline's output is test-pinned from both directions: [`test/build.test.js`](test/build.test.js) asserts what the build emits (the `--bifrost-seam` gradient included), and [`tests/DesignSystem.Tokens.Tests`](tests/DesignSystem.Tokens.Tests) asserts what the .NET package carries.
+Requires Bun for install and pack, Node ≥ 22 to run the build and tests, and the .NET 11 preview SDK pinned by `global.json`. The pipeline's output is test-pinned from both directions: [`test/build.test.js`](test/build.test.js) asserts what the build emits (the `--bifrost-seam` gradient included), and [`tests/DesignSystem.Tokens.Tests`](tests/DesignSystem.Tokens.Tests) asserts what the .NET package carries.
 
 ## The cosmos
 

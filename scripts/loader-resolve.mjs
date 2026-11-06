@@ -3,9 +3,9 @@ import path from 'node:path';
 
 // Keyed off NORSE_BUILD_ARTIFACTS_DIR directly (persistent, User-scope, survives reboot —
 // see scripts/Redirect-BuildArtifacts.ps1 and devcontainer.json) rather than a value handed
-// down by the .NET build, so `npm run build`/`npm test` resolve identically whether invoked
+// down by the .NET build, so `bun run build`/`bun run test` resolve identically whether invoked
 // standalone or via `dotnet build`. The realm folder name (this file's grandparent dir) is
-// derived, not hardcoded, so the same script works unmodified if another realm's npm build
+// derived, not hardcoded, so the same script works unmodified if another realm's JS build
 // adopts this pattern.
 const artifactsDir = process.env.NORSE_BUILD_ARTIFACTS_DIR;
 const realmDir = path.basename(path.resolve(import.meta.dirname, '..'));
