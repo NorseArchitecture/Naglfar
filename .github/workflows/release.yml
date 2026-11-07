@@ -29,20 +29,15 @@ jobs:
       language: javascript-typescript
 
   # Inlined rather than calling the shared publish-nuget.yml: DesignSystem.Tokens' pack
-  # now shells to Bun and Node (Style Dictionary generates FluentTokenSeed.g.cs and the CSS
-  # static web asset), so this realm's own publish job needs both on the runner. The shared
-  # workflow stays free of them for every other NuGet-only realm.
+  # now shells to Bun (Style Dictionary generates FluentTokenSeed.g.cs and the CSS static
+  # web asset), so this realm's own publish job needs it on the runner. The shared
+  # workflow stays free of it for every other NuGet-only realm.
   publish-nuget:
     needs: [build-test, codeql-csharp, codeql-js]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Setup Node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: '24'
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0

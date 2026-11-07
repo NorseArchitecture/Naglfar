@@ -1,4 +1,4 @@
-import StyleDictionary from 'style-dictionary';
+import StyleDictionary from './scripts/style-dictionary.js';
 
 function cssVarName(token) {
 	return token.path

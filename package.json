@@ -19,13 +19,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "node --import ./scripts/loader-register.mjs style-dictionary.config.js",
+    "build": "bun style-dictionary.config.js",
     "prepack": "bun run build",
     "pretest": "bun run build",
-    "test": "node --import ./scripts/loader-register.mjs --test test/*.test.js"
-  },
-  "engines": {
-    "node": ">=22"
+    "test": "bun test ./test"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"

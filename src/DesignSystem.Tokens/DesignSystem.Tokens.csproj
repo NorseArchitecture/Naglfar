@@ -9,11 +9,9 @@
 		Redirect-BuildArtifacts.ps1 sets), same as .NET's own BaseIntermediateOutputPath
 		redirect in the root Directory.Build.props. A symlink/junction back into the repo
 		doesn't work here — one OS's reparse point is unreadable to the other over the
-		9p-bridged mount — so scripts/loader-register.mjs (a Node module customization
-		hook, registered from package.json's "build" script via Node's module preload
-		option) redirects style-dictionary's bare-specifier resolution to
-		$(NORSE_BUILD_ARTIFACTS_DIR)/Naglfar/node_modules at import time instead.
-		scripts/loader-resolve.mjs reads NORSE_BUILD_ARTIFACTS_DIR itself — the same
+		9p-bridged mount — so scripts/style-dictionary.js loads Style Dictionary from
+		$(NORSE_BUILD_ARTIFACTS_DIR)/Naglfar/node_modules by resolved path instead.
+		It reads NORSE_BUILD_ARTIFACTS_DIR itself — the same
 		persistent var _BunInstallDir below is keyed off — so `bun run build`/`bun run test`
 		behave identically whether run standalone or via the .NET build; no value needs
 		handing down through the Exec task. Falls back to plain in-tree node_modules when
