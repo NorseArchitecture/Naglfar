@@ -1,4 +1,4 @@
-import { test } from 'node:test';
+import { test } from 'bun:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
@@ -98,7 +98,7 @@ test('every color token in the source resolves to a valid 6-digit hex value', as
 	// init, before reference resolution, so a token like {color.semantic.primary.light}
 	// still holds its unresolved "{color.amber.700}" reference string at that point.
 	// getPlatformTokens() runs the same resolve step the real build platforms use.
-	const { default: StyleDictionary } = await import('style-dictionary');
+	const { default: StyleDictionary } = await import('../scripts/style-dictionary.js');
 	const sd = new StyleDictionary({ source: ['tokens/**/*.json'], platforms: { probe: { transformGroup: 'css' } } });
 	await sd.hasInitialized;
 	const { allTokens } = await sd.getPlatformTokens('probe');
